@@ -15,6 +15,7 @@ test.describe("Inventory", () => {
 
   // Test 6
   test("should display all six products on inventory page", async () => {
+    await expect(inventoryPage.inventoryList).toBeVisible();
     const count = await inventoryPage.getProductCount();
     expect(count).toBe(6);
   });

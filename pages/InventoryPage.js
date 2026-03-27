@@ -12,6 +12,7 @@ export class InventoryPage {
       .locator(".inventory_item")
       .first()
       .locator("button");
+    this.inventoryList = page.locator(".inventory_list");
   }
 
   async getFirstProductName() {

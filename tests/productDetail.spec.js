@@ -37,4 +37,22 @@ test.describe("Product Detail", () => {
     expect(detailName).toBe(inventoryName);
     expect(detailPrice).toBe(inventoryPrice);
   });
+
+  // Test 13 (new)
+  test("should navigate back to inventory using back to products button", async ({
+    page,
+  }) => {
+    // navigate to detail page first
+    await inventoryPage.clickFirstProduct();
+    await expect(page).toHaveURL(/inventory-item/);
+
+    // click back to products
+    await productDetailPage.goBack();
+
+    // verify URL back to inventory
+    await expect(page).toHaveURL(/inventory/);
+
+    // verify inventory list is visible
+    await expect(inventoryPage.inventoryList).toBeVisible();
+  });
 });
