@@ -1,3 +1,5 @@
+import { NavMenu } from "../components/NavMenu.js";
+
 export class InventoryPage {
   constructor(page) {
     this.page = page;
@@ -13,6 +15,9 @@ export class InventoryPage {
       .first()
       .locator("button");
     this.inventoryList = page.locator(".inventory_list");
+
+    // NavMenu component
+    this.navMenu = new NavMenu(page);
   }
 
   async getFirstProductName() {

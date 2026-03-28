@@ -20,3 +20,9 @@ export const errorMessages = {
   usernameRequired: "Epic sadface: Username is required",
   passwordRequired: "Epic sadface: Password is required",
 };
+
+export const checkoutInfo = {
+  firstName: "Test",
+  lastName: "User",
+  zipCode: "12345",
+};
