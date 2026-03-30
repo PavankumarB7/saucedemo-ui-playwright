@@ -4,6 +4,7 @@ export class NavMenu {
 
     // Locators
     this.cartIcon = page.locator(".shopping_cart_link");
+    this.cartBadge = page.locator(".shopping_cart_badge");
     this.menuButton = page.locator("#react-burger-menu-btn");
     this.allItemsLink = page.locator("#inventory_sidebar_link");
     this.resetLink = page.locator("#reset_sidebar_link");
@@ -12,6 +13,10 @@ export class NavMenu {
 
   async clickCart() {
     await this.cartIcon.click();
+  }
+
+  async getCartBadgeCount() {
+    return await this.cartBadge.textContent();
   }
 
   async clickAllItems() {

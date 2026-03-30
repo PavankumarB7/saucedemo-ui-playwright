@@ -19,7 +19,7 @@ test.describe("Checkout", () => {
     checkoutPage = new CheckoutPage(page);
   });
 
-  // Test 20
+  // Test 23
   test("should display error when checkout form is submitted with empty required fields", async ({
     page,
   }) => {
@@ -33,7 +33,7 @@ test.describe("Checkout", () => {
     await expect(checkoutPage.errorMessage).toBeVisible();
   });
 
-  // Test 21
+  // Test 24
   test("should display correct order summary with item total and tax", async ({
     page,
   }) => {
@@ -61,7 +61,7 @@ test.describe("Checkout", () => {
     expect(total).toBeCloseTo(itemTotal + tax, 2);
   });
 
-  // Test 22
+  // Test 25
   test("should complete order and display confirmation message", async ({
     page,
   }) => {
@@ -89,7 +89,7 @@ test.describe("Checkout", () => {
     );
   });
 
-  // Test 23
+  // Test 26
   test("should allow checkout completion with empty cart showing zero order total", async ({
     page,
   }) => {
@@ -102,5 +102,45 @@ test.describe("Checkout", () => {
 
     expect(itemTotal).toBe(0);
     expect(total).toBe(0);
+  });
+
+  // Test 27
+  test("should display correct combined total for multiple items in checkout", async ({
+    page,
+  }) => {
+    // get prices from inventory before adding
+    const price1Raw = await inventoryPage.getProductPriceByIndex(0);
+    const price2Raw = await inventoryPage.getProductPriceByIndex(1);
+
+    // convert to numbers for calculation
+    const price1 = parseFloat(price1Raw.replace("$", ""));
+    const price2 = parseFloat(price2Raw.replace("$", ""));
+    const expectedItemTotal = price1 + price2;
+
+    // add both products to cart
+    await inventoryPage.addMultipleProductsToCart(2);
+
+    // navigate to cart then checkout
+    await inventoryPage.navMenu.clickCart();
+    await cartPage.proceedToCheckout();
+
+    // fill checkout info
+    await checkoutPage.fillCheckoutInfo(
+      checkoutInfo.firstName,
+      checkoutInfo.lastName,
+      checkoutInfo.zipCode,
+    );
+    await checkoutPage.clickContinue();
+
+    // get actual values from order summary
+    const itemTotal = await checkoutPage.getItemTotal();
+    const tax = await checkoutPage.getTax();
+    const total = await checkoutPage.getTotal();
+
+    // verify item total matches sum of both product prices
+    expect(itemTotal).toBeCloseTo(expectedItemTotal, 2);
+
+    // verify total = item total + tax
+    expect(total).toBeCloseTo(itemTotal + tax, 2);
   });
 });

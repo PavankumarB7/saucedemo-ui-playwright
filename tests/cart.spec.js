@@ -50,7 +50,7 @@ test.describe("Cart", () => {
     expect(await cartPage.getCartItemCount()).toBe(0);
 
     // verify cart badge is gone
-    await expect(inventoryPage.cartBadge).not.toBeVisible();
+    await expect(inventoryPage.navMenu.cartBadge).not.toBeVisible();
   });
 
   // Test 16
@@ -87,13 +87,13 @@ test.describe("Cart", () => {
   test("should reset app state and clear cart badge", async ({ page }) => {
     // add item to cart
     await inventoryPage.addFirstProductToCart();
-    await expect(inventoryPage.cartBadge).toBeVisible();
+    await expect(inventoryPage.navMenu.cartBadge).toBeVisible();
 
     // reset app state
     await cartPage.navMenu.resetAppState();
 
     // verify cart badge is gone
-    await expect(inventoryPage.cartBadge).not.toBeVisible();
+    await expect(inventoryPage.navMenu.cartBadge).not.toBeVisible();
   });
 
   // Test 19
@@ -107,4 +107,63 @@ test.describe("Cart", () => {
       await expect(inventoryPage.addToCartButton).toHaveText("Add to cart");
     },
   );
+
+  // Test 20
+  test("should update cart badge when multiple products are added", async () => {
+    // add 2 products to cart
+    await inventoryPage.addMultipleProductsToCart(2);
+
+    // verify badge shows correct count
+    await expect(inventoryPage.navMenu.cartBadge).toBeVisible();
+    const count = await inventoryPage.navMenu.getCartBadgeCount();
+    expect(count).toBe("2");
+  });
+
+  // Test 21
+  test("should display all added items in cart with correct details", async () => {
+    // get product details from inventory before adding
+    const name1 = await inventoryPage.getProductNameByIndex(0);
+    const price1 = await inventoryPage.getProductPriceByIndex(0);
+    const name2 = await inventoryPage.getProductNameByIndex(1);
+    const price2 = await inventoryPage.getProductPriceByIndex(1);
+
+    // add both products to cart
+    await inventoryPage.addMultipleProductsToCart(2);
+
+    // navigate to cart
+    await inventoryPage.navMenu.clickCart();
+
+    // verify both items in cart
+    const cartNames = await cartPage.getCartItemNames();
+    const cartPrices = await cartPage.getCartItemPrices();
+
+    expect(cartNames).toContain(name1);
+    expect(cartNames).toContain(name2);
+    expect(cartPrices).toContain(price1);
+    expect(cartPrices).toContain(price2);
+  });
+
+  // Test 22
+  test("should remove one item from cart and keep the other", async () => {
+    // add 2 products to cart
+    await inventoryPage.addMultipleProductsToCart(2);
+
+    // navigate to cart
+    await inventoryPage.navMenu.clickCart();
+
+    // get both item names before removal
+    const cartNames = await cartPage.getCartItemNames();
+    const secondItemName = cartNames[1];
+
+    // remove first item
+    await cartPage.removeItemByIndex(0);
+
+    // verify cart count is now 1
+    const count = await cartPage.getCartItemCount();
+    expect(count).toBe(1);
+
+    // verify second item still present
+    const remainingNames = await cartPage.getCartItemNames();
+    expect(remainingNames).toContain(secondItemName);
+  });
 });

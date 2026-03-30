@@ -14,7 +14,7 @@ test.describe("Logout", () => {
     inventoryPage = new InventoryPage(page);
   });
 
-  // Test 24
+  // Test 28
   test("should logout successfully and redirect to login page", async ({
     page,
   }) => {
@@ -28,7 +28,7 @@ test.describe("Logout", () => {
     await expect(loginPage.loginButton).toBeVisible();
   });
 
-  // Test 25
+  // Test 29
   test("should not be able to navigate back after logout", async ({ page }) => {
     // logout via NavMenu
     await inventoryPage.navMenu.logout();

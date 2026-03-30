@@ -37,8 +37,8 @@ saucedemo-ui-playwright/
 │   ├── login.spec.js            # 5 login tests
 │   ├── inventory.spec.js        # 6 inventory tests
 │   ├── productDetail.spec.js    # 2 product detail tests
-│   ├── cart.spec.js             # 6 cart tests
-│   ├── checkout.spec.js         # 4 checkout tests
+│   ├── cart.spec.js             # 9 cart tests
+│   ├── checkout.spec.js         # 5 checkout tests
 │   └── logout.spec.js           # 2 logout tests
 └── utils/
     └── testData.js              # Centralised test data — users, error messages, checkout info
@@ -137,9 +137,24 @@ Opens a visual dashboard showing pass/fail charts, step-by-step test breakdown, 
 
 ---
 
+## CI/CD
+
+This project uses GitHub Actions to automatically run all 29 tests on every push to `main`.
+
+**Pipeline runs:**
+
+- Install dependencies
+- Install Playwright browsers
+- Run all tests across Chromium, Firefox, and WebKit
+- Upload test results as artifacts
+
+View pipeline runs under the **Actions** tab in the repository.
+
+---
+
 ## Test Coverage
 
-25 tests across 6 feature areas.
+29 tests across 6 feature areas.
 
 | #   | Test                                                                            | File                  |
 | --- | ------------------------------------------------------------------------------- | --------------------- |
@@ -162,12 +177,16 @@ Opens a visual dashboard showing pass/fail charts, step-by-step test breakdown, 
 | 17  | should navigate back to inventory using all items menu                          | cart.spec.js          |
 | 18  | should reset app state and clear cart badge                                     | cart.spec.js          |
 | 19  | should show add to cart button after reset app state                            | cart.spec.js          |
-| 20  | should display error when checkout form is submitted with empty required fields | checkout.spec.js      |
-| 21  | should display correct order summary with item total and tax                    | checkout.spec.js      |
-| 22  | should complete order and display confirmation message                          | checkout.spec.js      |
-| 23  | should allow checkout completion with empty cart showing zero order total       | checkout.spec.js      |
-| 24  | should logout successfully and redirect to login page                           | logout.spec.js        |
-| 25  | should not be able to navigate back after logout                                | logout.spec.js        |
+| 20  | should update cart badge when multiple products are added                       | cart.spec.js          |
+| 21  | should display all added items in cart with correct details                     | cart.spec.js          |
+| 22  | should remove one item from cart and keep the other                             | cart.spec.js          |
+| 23  | should display error when checkout form is submitted with empty required fields | checkout.spec.js      |
+| 24  | should display correct order summary with item total and tax                    | checkout.spec.js      |
+| 25  | should complete order and display confirmation message                          | checkout.spec.js      |
+| 26  | should allow checkout completion with empty cart showing zero order total       | checkout.spec.js      |
+| 27  | should display correct combined total for multiple items in checkout            | checkout.spec.js      |
+| 28  | should logout successfully and redirect to login page                           | logout.spec.js        |
+| 29  | should not be able to navigate back after logout                                | logout.spec.js        |
 
 ---
 
@@ -179,6 +198,7 @@ Opens a visual dashboard showing pass/fail charts, step-by-step test breakdown, 
 - Used centralised test data — no hardcoded strings in test files
 - Used `data-test` attributes as primary locators for maximum stability
 - Identified a real UI bug during manual exploration before automating
+- Covered both single and multi-item cart scenarios for thorough e-commerce coverage
 
 ---
 

@@ -55,8 +55,8 @@ test.describe("Inventory", () => {
   // Test 11
   test("should add product to cart and update cart badge", async () => {
     await inventoryPage.addFirstProductToCart();
-    await expect(inventoryPage.cartBadge).toBeVisible();
-    const count = await inventoryPage.getCartBadgeCount();
+    await expect(inventoryPage.navMenu.cartBadge).toBeVisible();
+    const count = await inventoryPage.navMenu.getCartBadgeCount();
     expect(count).toBe("1");
   });
 });

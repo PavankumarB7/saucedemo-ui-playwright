@@ -9,11 +9,7 @@ export class InventoryPage {
     this.productNames = page.locator(".inventory_item_name");
     this.productPrices = page.locator(".inventory_item_price");
     this.sortDropdown = page.locator('[data-test="product-sort-container"]');
-    this.cartBadge = page.locator(".shopping_cart_badge");
-    this.addToCartButton = page
-      .locator(".inventory_item")
-      .first()
-      .locator("button");
+    this.addToCartButtons = page.locator('[data-test^="add-to-cart"]');
     this.inventoryList = page.locator(".inventory_list");
 
     // NavMenu component
@@ -26,6 +22,14 @@ export class InventoryPage {
 
   async getFirstProductPrice() {
     return await this.productPrices.first().textContent();
+  }
+
+  async getProductNameByIndex(index) {
+    return await this.productNames.nth(index).textContent();
+  }
+
+  async getProductPriceByIndex(index) {
+    return await this.productPrices.nth(index).textContent();
   }
 
   async clickFirstProduct() {
@@ -50,10 +54,17 @@ export class InventoryPage {
   }
 
   async addFirstProductToCart() {
-    await this.addToCartButton.click();
+    await this.addToCartButtons.first().click();
   }
 
-  async getCartBadgeCount() {
-    return await this.cartBadge.textContent();
+  async addProductToCartByIndex(index) {
+    await this.addToCartButtons.nth(index).click();
+  }
+
+  async addMultipleProductsToCart(count) {
+    const allItems = await this.page.locator(".inventory_item").all();
+    for (let i = 0; i < count; i++) {
+      await allItems[i].locator("button").click();
+    }
   }
 }
